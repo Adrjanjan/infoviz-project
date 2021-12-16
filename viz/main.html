@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<style type="text/css" media="screen, print">
+			body  { margin: 30px 50px; font-family: sans-serif; }
+			line, polyline, path { stroke: black; fill: none; }
+
+			.collapsible {
+				a: #0ee;
+				background-color: rgb(0, 123, 194);
+				color: white;
+				cursor: pointer;
+				padding: 18px;
+				width: 100%;
+				border: none;
+				text-align: center;
+				outline: none;
+				font-size: 20px;
+			}
+
+			.active, .collapsible:hover {
+				background-color: rgb(0, 52, 148);
+			}
+
+			.content {
+				padding: 0 18px;
+				max-height: 0;
+				overflow: hidden;
+				transition: max-height 0.2s ease-out;
+				background-color: #f1f1f1;
+			}
+
+		</style>
+		<title>Global Gender Gap index</title>
+	</head>
+<body>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<h1>Information Visualisation Project</h1>
+	<h4>
+		JANAKIEWICZ Adrian <br/>
+		KUTYŁA Maciej <br/>
+		MAZUR Rafał  <br/>
+		OCIEPKA Bartosz  <br/>
+	</h4>
+
+	<div id=charts>
+		<button class="collapsible">Chart 1</button>
+		<div id="chart1div">
+			 <!-- class="content"> TODO USUNAC PO SKONCZENIU -->
+			<!-- <canvas id="myChart" height="100%"></canvas>  -->
+
+
+			<b>Indicator:</b>
+			<select name="Indicator type" id="indicator" onchange="indicator_selector()">
+				<option value="glob">Global index</option>
+				<option value="eco">Economic Participation</option>
+				<option value="edu">Educational Attainment</option>
+				<option value="health">Health and Survival</option>
+				<option value="pol">Political Empowerment</option>
+			</select>
+			</br>
+
+			<canvas id="chart1" height="100%"></canvas>
+
+			</br>
+			<b>Year:</b>
+			<input type="range" class="slider" value="2012" min="2006" max="2020" id="year" onchange="year_slider()" oninput="this.nextElementSibling.value = this.value">
+			<output>2012</output>
+
+
+		</div>
+		<button class="collapsible">Chart 2</button>
+		<div id="chart2div" class="content">
+			<canvas id="chart2" height="100%"></canvas>
+		</div>
+		<button class="collapsible">Chart 3</button>
+		<div id="chart3div" class="content">
+			<canvas id="chart3" height="100%"></canvas>
+		</div>
+		<button class="collapsible">Chart 4</button>
+		<div id="chart4div" class="content">
+			<canvas id="chart4" height="100%"></canvas>
+		</div>
+	</div>
+
+	<script> // test graph 
+
+		const labels = [
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+		];
+		const data = {
+			labels: labels,
+			datasets: [{
+			label: 'My First dataset',
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgb(255, 99, 132)',
+			data: [0, 10, 5, 2, 20, 30, 45],
+			}]
+		};
+
+		const config = {
+			type: 'line',
+			data: data,
+			options: {}
+		};
+
+		
+		const myChart = new Chart(
+			document.getElementById('myChart').getContext('2d'),
+			config
+		);
+	</script>
+	<script src="./barchart_adrian.js"></script>
+	<script> // folding 
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+		
+		for (i = 0; i < coll.length; i++) {
+		  coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.maxHeight){
+			  content.style.maxHeight = null;
+			} else {
+			  content.style.maxHeight = content.scrollHeight + "px";
+			} 
+		  });
+		}
+	</script>
+</body>
+</html>
