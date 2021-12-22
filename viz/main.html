@@ -9,7 +9,6 @@
 			line, polyline, path { stroke: black; fill: none; }
 
 			.collapsible {
-				a: #0ee;
 				background-color: rgb(0, 123, 194);
 				color: white;
 				cursor: pointer;
@@ -38,6 +37,7 @@
 	</head>
 <body>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://d3js.org/d3.v7.min.js"></script>
 
 	<h1>Information Visualisation Project</h1>
 	<h4>
@@ -88,36 +88,35 @@
 	</div>
 
 	<script> // test graph 
+		// const labels = [
+		// 	'January',
+		// 	'February',
+		// 	'March',
+		// 	'April',
+		// 	'May',
+		// 	'June',
+		// ];
+		// const data = {
+		// 	labels: labels,
+		// 	datasets: [{
+		// 	label: 'My First dataset',
+		// 	backgroundColor: 'rgb(255, 99, 132)',
+		// 	borderColor: 'rgb(255, 99, 132)',
+		// 	data: [0, 10, 5, 2, 20, 30, 45],
+		// 	}]
+		// };
 
-		const labels = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-		];
-		const data = {
-			labels: labels,
-			datasets: [{
-			label: 'My First dataset',
-			backgroundColor: 'rgb(255, 99, 132)',
-			borderColor: 'rgb(255, 99, 132)',
-			data: [0, 10, 5, 2, 20, 30, 45],
-			}]
-		};
-
-		const config = {
-			type: 'line',
-			data: data,
-			options: {}
-		};
+		// const config = {
+		// 	type: 'line',
+		// 	data: data,
+		// 	options: {}
+		// };
 
 		
-		const myChart = new Chart(
-			document.getElementById('myChart').getContext('2d'),
-			config
-		);
+		// const myChart = new Chart(
+		// 	document.getElementById('myChart').getContext('2d'),
+		// 	config
+		// );
 	</script>
 	<script src="./barchart_adrian.js"></script>
 	<script> // folding 
