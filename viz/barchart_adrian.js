@@ -22,6 +22,8 @@ const regions_colormap = {
     Europe: ["rgb(153,153,153)", "rgb(119,119,119)", "rgb(85,85,85)", "rgb(51,51,51)", "rgb(17,17,17)"],
     Oceania: ["rgb(0,80,115)", "rgb(16,125,172)", "rgb(24,154,211)", "rgb(30,187,215)", "rgb(113,199,236)"],
 }
+
+
 let global_base_data
 let global_bar_chart
 Promise.all([
@@ -53,17 +55,12 @@ Promise.all([
     const config = {
         type: 'bar',
         data: prepare_data(),
-        options: {
-            // TODO DODAC ONCLICKI DO SAMEGO WYKRESU 
+        options: {            
+            onClick: on_click_sort_chart,
             plugins: {
-                // legend: {
-                //     display: true,
-                //     // onclick: 
-                //     labels: {
-                //         data: regions,
-                //         color: regions_colormap
-                //     }
-                // }
+                legend: {
+                    display: false
+                }
             }
         }
     };
@@ -77,58 +74,72 @@ Promise.all([
     global_bar_chart = bar_chart
 
     function prepare_data() {
-        const year = get_year()
-        const indicator = get_indicator()
-
-        const filtered = base_data.filter(
-            v => v.year == year && 
-                v.indicator == indicator
-        )
-        return {
-            labels: filtered.map(v => v.country),
-            datasets: [{
-                data: filtered.map(v => v.i)
-            }]
-        }
+        return filter_data(base_data)
     }
 });
 
 
-function prepare_data() {
+// Behaviour 
+function filter_data(d) {
     const year = get_year()
     const indicator = get_indicator()
+    const sort_function = get_sort_function(actual_sort)
 
-    const filtered = global_base_data.filter(
+    const filtered = d.filter(
         v => v.year == year && 
             v.indicator == indicator
     )
+    const sorted = filtered.sort(sort_function)
 
     return {
-        labels: filtered.map(v => v.country),
+        labels: sorted.map(v => v.country),
         datasets: [{
-            data: filtered.map(v => v.i)
+            data: sorted.map(v => v.i),
+            backgroundColor: sorted.map(v => regions_colormap[v.region].at(regions[v.region]))
         }]
     }
+}
+
+let actual_sort = 'country'
+const on_click_sort_chart = e => { // sort name <-> index
+    let sort_function
+    if( actual_sort == 'country'){
+        console.log('now sort index')
+        sort_function = (a, b) => a[1] - b[1]
+        actual_sort = 'index'
+    } else {
+        console.log('now sort country')
+        sort_function = (a, b) => a[0].localeCompare(b[0])
+        actual_sort = 'country'
+    }
+
+    const data = e.chart.data 
+    const sorted = zip(data.labels, data.datasets[0].data).sort(sort_function)
+    data.labels = sorted.map(a=>a[0])
+    data.datasets[0].data = sorted.map(a=>a[1])
+    global_bar_chart.update()
 }
 
 // Listeners 
 function indicator_selector(){
     console.log("indicator = " + get_indicator())
-    global_bar_chart.config.data = prepare_data()
+    global_bar_chart.config.data = filter_data(global_base_data)
     global_bar_chart.update()
 }
 
 function year_slider(){
     console.log("year =" + get_year())
-    global_bar_chart.config.data = prepare_data()
+    global_bar_chart.config.data = filter_data(global_base_data)
     global_bar_chart.update()
 }
 
 //  Getters
-function get_year(){
-    return document.getElementById('year').value
-}
+const get_year = _ => document.getElementById('year').value
+const get_indicator = _ => document.getElementById('indicator').value
+const get_sort_function = sort => new Map([
+        ['country', (a, b) => a.country.localeCompare(b.country)],
+        ['index', (a, b) => a.i - b.i]
+    ]).get(sort)
 
-function get_indicator(){
-    return document.getElementById('indicator').value
-}
+// Helpers 
+const zip = (a, b) => a.map((k, i) => [k, b[i]])
