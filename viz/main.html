@@ -32,6 +32,10 @@
 				background-color: #f1f1f1;
 			}
 
+			.legend-list {
+				display: inline-block;
+			}
+
 		</style>
 		<title>Global Gender Gap index</title>
 	</head>
@@ -55,21 +59,21 @@
 
 
 			<b>Indicator:</b>
-			<select name="Indicator type" id="indicator" onchange="indicator_selector()">
+			<select name="Indicator type" id="indicator" onchange="update_chart1()">
 				<option value="glob">Global index</option>
 				<option value="eco">Economic Participation</option>
 				<option value="edu">Educational Attainment</option>
 				<option value="health">Health and Survival</option>
 				<option value="pol">Political Empowerment</option>
 			</select>
-			</br>
-
-			<canvas id="chart1" height="100%"></canvas>
-
-			</br>
 			<b>Year:</b>
-			<input type="range" class="slider" value="2012" min="2006" max="2020" id="year" onchange="year_slider()" oninput="this.nextElementSibling.value = this.value">
+			<input type="range" class="slider" value="2012" min="2006" max="2020" id="year" onchange="update_chart1()" oninput="this.nextElementSibling.value = this.value">
 			<output>2012</output>
+			</br>
+			<canvas id="chart1" height="100%"></canvas>
+			</br>
+			<div id="chart1-legend">
+			</div>
 
 
 		</div>

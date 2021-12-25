@@ -6,6 +6,7 @@ const americas = ['Latin America and the Caribbean', 'Northern America']
 const asia = ['Central Asia', 'Eastern Asia', 'South-eastern Asia', 'Southern Asia', 'Western Asia']
 const europe = ['Eastern Europe', 'Northern Europe', 'Southern Europe', 'Western Europe']
 const oceania = ['Australia and New Zealand', 'Melanesia']
+const all_subregions = africa.concat(americas).concat(asia).concat(europe).concat(oceania)
 
 const regions = {
     Africa: africa, 
@@ -16,13 +17,70 @@ const regions = {
 }
 
 const regions_colormap = {
-    Africa: ["rgb(255,249,174)", "rgb(248,237,98)", "rgb(233,215,0)", "rgb(218,182,0)", "rgb(169,134,0)"],
-    Americas: ["rgb(255,186,186)", "rgb(255,123,123)", "rgb(255,82,82)", "rgb(255,0,0)", "rgb(167,0,0)"],
-    Asia: ["rgb(35,77,32)", "rgb(54,128,45)", "rgb(119,171,89)", "rgb(201,223,138)", "rgb(240,247,218)"],
-    Europe: ["rgb(153,153,153)", "rgb(119,119,119)", "rgb(85,85,85)", "rgb(51,51,51)", "rgb(17,17,17)"],
-    Oceania: ["rgb(0,80,115)", "rgb(16,125,172)", "rgb(24,154,211)", "rgb(30,187,215)", "rgb(113,199,236)"],
+    Africa: ["rgb(255, 255, 0)", "rgb(255, 255, 141)"],
+    Americas: ["rgb(255, 110, 64)", "rgb(221, 44, 0)"],
+    Asia: ["rgb(128, 216, 255)", "rgb(0, 176, 255)", "rgb(83, 109, 254)", "rgb(48, 79, 254)", "rgb(40, 53, 147)" ],
+    Europe: ["rgb(209, 196, 233)", "rgb(149, 117, 205)", "rgb(156, 39, 176)", "rgb(123, 31, 162)" ],
+    Oceania: ["rgb(0, 200, 83)", "rgb(118, 255, 3)"]
+}
+const get_color = v => regions_colormap[v.region][regions[v.region].findIndex(x => x == v.subregion)]
+
+
+let chart1_legend = {
+    region: null,
+    subregion: null
+}
+const chart1_legend_region_listener = e => {
+    chart1_legend.subregion = null
+    if(chart1_legend.region != e.target.innerHTML) { // select 
+        chart1_legend.region = e.target.innerHTML  
+        e.target.style.boxShadow = "2px"
+    } else { // unselect 
+        chart1_legend.region = null 
+        e.target.style.boxShadow = "0px"
+    } 
+    global_bar_chart.config.data = filter_data(global_base_data)
+    global_bar_chart.update()
+} 
+const chart1_legend_subregion_listener = e => {
+    if(chart1_legend.subregion != e.target.innerHTML) { // select 
+        chart1_legend.subregion = e.target.innerHTML  
+        e.target.style.boxShadow = "2px"
+    } else { // unselect 
+        chart1_legend.subregion = null 
+        e.target.style.boxShadow = "0px"
+    } 
+    chart1_legend.region = null
+    global_bar_chart.config.data = filter_data(global_base_data)
+    global_bar_chart.update()
 }
 
+build_chart1_legend()
+
+function build_chart1_legend(){
+    const legend_div = document.getElementById("chart1-legend")
+    legend_div.style.display = "inline-block"
+    for (const region in regions){  
+         const region_div = document.createElement('div');
+         region_div.id = 'chart1_legend_region_' + region;
+         const region_title = document.createElement('h4')
+         region_title.innerText = region 
+         region_title.onclick = chart1_legend_region_listener
+         const region_list = document.createElement('ul')
+         region_list.className = "legend-list"
+         regions[region].forEach(s => {
+             const li = document.createElement('li')
+             li.id = 'chart1_legend_subregion' + s
+             li.onclick = chart1_legend_subregion_listener
+             li.color = get_color({region:region, subregion:s})
+             li.innerHTML = s
+             region_list.appendChild(li)
+         })
+         region_div.appendChild(region_title)
+         region_div.appendChild(region_list)
+         legend_div.appendChild(region_div)
+    }
+}
 
 let global_base_data
 let global_bar_chart
@@ -54,17 +112,27 @@ Promise.all([
 
     const config = {
         type: 'bar',
-        data: prepare_data(),
+        data: filter_data(base_data),
         options: {            
             onClick: on_click_sort_chart,
             plugins: {
                 legend: {
                     display: false
                 }
+            }, 
+            scales: {
+                x: { 
+                  ticks: {
+                    display: true
+                  }
+                }
+            },
+            animation: {
+                duration: 0
             }
         }
     };
-    console.log(config)
+        
     const bar_chart = new Chart(
         document.getElementById('chart1'),
         config
@@ -72,22 +140,18 @@ Promise.all([
 
     global_base_data = base_data 
     global_bar_chart = bar_chart
-
-    function prepare_data() {
-        return filter_data(base_data)
-    }
 });
 
 
-// Behaviour 
 function filter_data(d) {
     const year = get_year()
     const indicator = get_indicator()
-    const sort_function = get_sort_function(actual_sort)
-
+    const sort_function = get_sort_function(chart1_sort)
+    const subregions = get_subregions()
     const filtered = d.filter(
         v => v.year == year && 
-            v.indicator == indicator
+            v.indicator == indicator &&
+            subregions.includes(v.subregion) 
     )
     const sorted = filtered.sort(sort_function)
 
@@ -95,40 +159,18 @@ function filter_data(d) {
         labels: sorted.map(v => v.country),
         datasets: [{
             data: sorted.map(v => v.i),
-            backgroundColor: sorted.map(v => regions_colormap[v.region].at(regions[v.region]))
+            backgroundColor: sorted.map(get_color)
         }]
     }
 }
 
-let actual_sort = 'country'
-const on_click_sort_chart = e => { // sort name <-> index
-    let sort_function
-    if( actual_sort == 'country'){
-        console.log('now sort index')
-        sort_function = (a, b) => a[1] - b[1]
-        actual_sort = 'index'
-    } else {
-        console.log('now sort country')
-        sort_function = (a, b) => a[0].localeCompare(b[0])
-        actual_sort = 'country'
-    }
-
-    const data = e.chart.data 
-    const sorted = zip(data.labels, data.datasets[0].data).sort(sort_function)
-    data.labels = sorted.map(a=>a[0])
-    data.datasets[0].data = sorted.map(a=>a[1])
-    global_bar_chart.update()
+let chart1_sort = 'country'
+const on_click_sort_chart = e => { 
+    chart1_sort = chart1_sort == 'country'? 'index' : 'country'
+    update_chart1()
 }
 
-// Listeners 
-function indicator_selector(){
-    console.log("indicator = " + get_indicator())
-    global_bar_chart.config.data = filter_data(global_base_data)
-    global_bar_chart.update()
-}
-
-function year_slider(){
-    console.log("year =" + get_year())
+const update_chart1 = _ => {
     global_bar_chart.config.data = filter_data(global_base_data)
     global_bar_chart.update()
 }
@@ -136,10 +178,17 @@ function year_slider(){
 //  Getters
 const get_year = _ => document.getElementById('year').value
 const get_indicator = _ => document.getElementById('indicator').value
+
 const get_sort_function = sort => new Map([
         ['country', (a, b) => a.country.localeCompare(b.country)],
         ['index', (a, b) => a.i - b.i]
     ]).get(sort)
+
+const get_subregions = _ =>  chart1_legend.region != null 
+    ? regions[chart1_legend.region]
+    : chart1_legend.subregion != null 
+    ? chart1_legend.subregion
+    : all_subregions
 
 // Helpers 
 const zip = (a, b) => a.map((k, i) => [k, b[i]])
