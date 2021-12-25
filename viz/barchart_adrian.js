@@ -17,8 +17,8 @@ const regions = {
 }
 
 const regions_colormap = {
-    Africa: ["rgb(255, 255, 141)", "rgb(255, 255, 0)"],
-    Americas: ["rgb(255, 110, 64)", "rgb(221, 44, 0)"],
+    Africa: ["rgb(255, 229, 127)", "rgb(255, 171, 0)"],
+    Americas: ["rgb(255, 100, 100)", "rgb(221, 22, 0)"],
     Asia: ["rgb(128, 216, 255)", "rgb(0, 176, 255)", "rgb(83, 109, 254)", "rgb(48, 79, 254)", "rgb(40, 53, 147)" ],
     Europe: ["rgb(209, 196, 233)", "rgb(149, 117, 205)", "rgb(156, 39, 176)", "rgb(123, 31, 162)" ],
     Oceania: ["rgb(118, 255, 3)", "rgb(0, 200, 83)"]
@@ -64,9 +64,9 @@ const chart1_legend_listener = e => {
     global_bar_chart.update()
 } 
 
-build_chart1_legend()
+build_chart1_legend(chart1_legend_listener)
 
-function build_chart1_legend(){
+function build_chart1_legend(listener){
     const legend_div = document.getElementById("chart1-legend")
     legend_div.className = "legend"
     for (const region in regions){  
@@ -75,13 +75,13 @@ function build_chart1_legend(){
          region_column.className = "legend-list"
          const region_title = document.createElement('p')
          region_title.innerText = region 
-         region_title.onclick = chart1_legend_listener
+         region_title.onclick = listener
          region_title.className = "legend-region"
          region_column.appendChild(region_title)
          regions[region].forEach(s => {
              const row = document.createElement('span')
              row.className = "legend-row"
-             row.onclick = chart1_legend_listener 
+             row.onclick = listener 
 
              const square = document.createElement('div') 
              square.className = "square"
