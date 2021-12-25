@@ -17,11 +17,11 @@ const regions = {
 }
 
 const regions_colormap = {
-    Africa: ["rgb(255, 255, 0)", "rgb(255, 255, 141)"],
+    Africa: ["rgb(255, 255, 141)", "rgb(255, 255, 0)"],
     Americas: ["rgb(255, 110, 64)", "rgb(221, 44, 0)"],
     Asia: ["rgb(128, 216, 255)", "rgb(0, 176, 255)", "rgb(83, 109, 254)", "rgb(48, 79, 254)", "rgb(40, 53, 147)" ],
     Europe: ["rgb(209, 196, 233)", "rgb(149, 117, 205)", "rgb(156, 39, 176)", "rgb(123, 31, 162)" ],
-    Oceania: ["rgb(0, 200, 83)", "rgb(118, 255, 3)"]
+    Oceania: ["rgb(118, 255, 3)", "rgb(0, 200, 83)"]
 }
 const get_color = v => regions_colormap[v.region][regions[v.region].findIndex(x => x == v.subregion)]
 
@@ -30,55 +30,73 @@ let chart1_legend = {
     region: null,
     subregion: null
 }
-const chart1_legend_region_listener = e => {
-    chart1_legend.subregion = null
-    if(chart1_legend.region != e.target.innerHTML) { // select 
-        chart1_legend.region = e.target.innerHTML  
-        e.target.style.boxShadow = "2px"
-    } else { // unselect 
-        chart1_legend.region = null 
-        e.target.style.boxShadow = "0px"
-    } 
+
+const chart1_legend_listener = e => {
+    // clear selection 
+    for (const selected of document.getElementsByClassName("legend-selected")) {
+        selected.className = selected.className.replace("legend-selected", "")    
+    }
+
+    const target = e.target.className.includes("square") ? e.target.nextElementSibling : e.target
+
+    // deselect same or select different  
+    if (target.className.includes("legend-region")) {
+        if(chart1_legend.region == target.innerHTML){ 
+            chart1_legend.region = null
+            target.className = target.className.replace(" legend-selected", "")
+        } else { 
+            chart1_legend.subregion = null
+            chart1_legend.region = target.innerHTML
+            target.className += " legend-selected"
+        }
+    } else {
+        if(chart1_legend.subregion == target.innerHTML){
+            chart1_legend.subregion = null
+            target.className = target.className.replace(" legend-selected", "")
+        } else { 
+            chart1_legend.region = null
+            chart1_legend.subregion = target.innerHTML
+            target.className += " legend-selected"
+        }
+    }
+         
     global_bar_chart.config.data = filter_data(global_base_data)
     global_bar_chart.update()
 } 
-const chart1_legend_subregion_listener = e => {
-    if(chart1_legend.subregion != e.target.innerHTML) { // select 
-        chart1_legend.subregion = e.target.innerHTML  
-        e.target.style.boxShadow = "2px"
-    } else { // unselect 
-        chart1_legend.subregion = null 
-        e.target.style.boxShadow = "0px"
-    } 
-    chart1_legend.region = null
-    global_bar_chart.config.data = filter_data(global_base_data)
-    global_bar_chart.update()
-}
 
 build_chart1_legend()
 
 function build_chart1_legend(){
     const legend_div = document.getElementById("chart1-legend")
-    legend_div.style.display = "inline-block"
+    legend_div.className = "legend"
     for (const region in regions){  
-         const region_div = document.createElement('div');
-         region_div.id = 'chart1_legend_region_' + region;
-         const region_title = document.createElement('h4')
+         const region_column = document.createElement('div');
+         region_column.id = 'chart1_legend_region_' + region;
+         region_column.className = "legend-list"
+         const region_title = document.createElement('p')
          region_title.innerText = region 
-         region_title.onclick = chart1_legend_region_listener
-         const region_list = document.createElement('ul')
-         region_list.className = "legend-list"
+         region_title.onclick = chart1_legend_listener
+         region_title.className = "legend-region"
+         region_column.appendChild(region_title)
          regions[region].forEach(s => {
-             const li = document.createElement('li')
+             const row = document.createElement('span')
+             row.className = "legend-row"
+             row.onclick = chart1_legend_listener 
+
+             const square = document.createElement('div') 
+             square.className = "square"
+             square.style.backgroundColor = get_color({region:region, subregion:s})
+
+             const li = document.createElement('span')
              li.id = 'chart1_legend_subregion' + s
-             li.onclick = chart1_legend_subregion_listener
-             li.color = get_color({region:region, subregion:s})
              li.innerHTML = s
-             region_list.appendChild(li)
+             li.className = "legend-subregion"
+
+             row.appendChild(square)
+             row.appendChild(li)
+             region_column.appendChild(row)
          })
-         region_div.appendChild(region_title)
-         region_div.appendChild(region_list)
-         legend_div.appendChild(region_div)
+         legend_div.appendChild(region_column)
     }
 }
 
