@@ -1,172 +1,219 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<style type="text/css" media="screen, print">
-			body  { margin: 30px 50px; font-family: sans-serif; }
-			line, polyline, path { stroke: black; fill: none; }
+	<style type="text/css" media="screen, print">
+		body  { margin: 30px 50px; font-family: sans-serif; }
+		line, polyline, path { stroke: black; fill: none; }
 
-			.collapsible {
-				background-color: rgb(0, 123, 194);
-				color: white;
-				cursor: pointer;
-				padding: 18px;
-				width: 100%;
-				border: none;
-				text-align: center;
-				outline: none;
-				font-size: 20px;
-			}
+		.collapsible {
+			background-color: rgb(0, 123, 194);
+			color: white;
+			cursor: pointer;
+			padding: 18px;
+			width: 100%;
+			border: none;
+			text-align: center;
+			outline: none;
+			font-size: 20px;
+		}
 
-			.active, .collapsible:hover {
-				background-color: rgb(0, 52, 148);
-			}
+		.active, .collapsible:hover {
+			background-color: rgb(0, 52, 148);
+		}
 
-			.content {
-				padding: 0 18px;
-				max-height: 0;
-				overflow: hidden;
-				transition: max-height 0.2s ease-out;
-				background-color: #f1f1f1;
-			}
+		.content {
+			padding: 0 18px;
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.2s ease-out;
+			background-color: #f1f1f1;
+		}
 
-			.square {
-				border-radius: 100% 35% 100% 100%;
-				height: 3em;
-				width: 3em;
-				background-color: #555;
-				float:left;
-				margin: 10px;
-			}
+		.square {
+			border-radius: 100% 35% 100% 100%;
+			height: 3em;
+			width: 3em;
+			background-color: #555;
+			float:left;
+			margin: 10px;
+		}
 
-			.legend {
-				display: flex; 
-				align-items: top;
-			}
+		.legend {
+			display: flex;
+			align-items: top;
+		}
 
-			.legend-list {
-					display: inline-block;
-			}
+		.legend-list {
+			display: inline-block;
+		}
 
-			.legend-row {
-				display: flex;
-				align-items: center;
-			}
+		.legend-row {
+			display: flex;
+			align-items: center;
+		}
 
-			.legend-region {
-				text-align: center;
-				align-items: center;
-				font-size: 150%;
-			}
+		.legend-region {
+			text-align: center;
+			align-items: center;
+			font-size: 150%;
+		}
 
-			.legend-subregion {
-				font-size: 100%;
-			}
+		.legend-subregion {
+			font-size: 100%;
+		}
 
-			.legend-selected {
-				text-shadow: 4px 4px 6px rgba(66, 68, 90, 1);
-			}
+		.legend-selected {
+			text-shadow: 4px 4px 6px rgba(66, 68, 90, 1);
+		}
 
-		</style>
-		<title>Global Gender Gap index</title>
-	</head>
+		.mk-legend-container {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-around;
+		}
+
+		.mk-legend-button {
+			padding: 1rem;
+			border-radius: 2rem;
+			border: 2px solid darkslategray;
+			margin: 3rem 1rem 3rem 1rem;
+		}
+
+	</style>
+	<title>Global Gender Gap index</title>
+</head>
 <body>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 
-	<h1>Information Visualisation Project</h1>
-	<h4>
-		JANAKIEWICZ Adrian <br/>
-		KUTYŁA Maciej <br/>
-		MAZUR Rafał  <br/>
-		OCIEPKA Bartosz  <br/>
-	</h4>
+<h1>Information Visualisation Project</h1>
+<h4>
+	JANAKIEWICZ Adrian <br/>
+	KUTYŁA Maciej <br/>
+	MAZUR Rafał  <br/>
+	OCIEPKA Bartosz  <br/>
+</h4>
 
-	<div id=charts>
-		<button class="collapsible">Chart 1</button>
-		<div id="chart1div" class="content">
-			<b>Indicator:</b>
-			<select name="Indicator type" id="indicator" onchange="update_chart1()">
-				<option value="glob">Global index</option>
-				<option value="eco">Economic Participation</option>
-				<option value="edu">Educational Attainment</option>
-				<option value="health">Health and Survival</option>
-				<option value="pol">Political Empowerment</option>
-			</select>
-			<b>Year:</b>
-			<input type="range" class="slider" value="2012" min="2006" max="2020" id="year" onchange="update_chart1()" oninput="this.nextElementSibling.value = this.value">
-			<output>2012</output>
-			</br>
-			<canvas id="chart1" height="100%"></canvas>
-			</br>
-			<div id="chart1-legend">
-			</div>
-
-
+<div id=charts>
+	<button class="collapsible">Chart 1</button>
+	<div id="chart1div" class="content">
+		<b>Indicator:</b>
+		<select name="Indicator type" id="indicator" onchange="update_chart1()">
+			<option value="glob">Global index</option>
+			<option value="eco">Economic Participation</option>
+			<option value="edu">Educational Attainment</option>
+			<option value="health">Health and Survival</option>
+			<option value="pol">Political Empowerment</option>
+		</select>
+		<b>Year:</b>
+		<input type="range" class="slider" value="2012" min="2006" max="2020" id="year" onchange="update_chart1()" oninput="this.nextElementSibling.value = this.value">
+		<output>2012</output>
+		</br>
+		<canvas id="chart1" height="100%"></canvas>
+		</br>
+		<div id="chart1-legend">
 		</div>
-		<button class="collapsible">Chart 2</button>
-		<div id="chart2div" class="content">
-			<canvas id="chart2" height="100%"></canvas>
-		</div>
-		<button class="collapsible">Chart 3</button>
-		<div id="chart3div" class="content">
-			<canvas id="chart3" height="100%"></canvas>
-		</div>
-		<button class="collapsible">Chart 4</button>
-		<div id="chart4div" class="content">
-			<canvas id="chart4" height="100%"></canvas>
+
+
+	</div>
+	<button class="collapsible">Chart 2</button>
+	<div id="chart2div" class="content">
+		<b>Indicator:</b>
+		<select name="Indicator type" id="indicator-chart-2" onchange="update_chart1()">
+			<option value="glob">Global index</option>
+			<option value="eco">Economic Participation</option>
+			<option value="edu">Educational Attainment</option>
+			<option value="health">Health and Survival</option>
+			<option value="pol">Political Empowerment</option>
+		</select>
+		<b>Continents:</b>
+		<select name="Indicator type" id="region-chart-2">
+			<option value="Europe">Europe</option>
+			<option value="Africa">Africa</option>
+			<option value="Asia">Asia</option>
+			<option value="Americas">Americas</option>
+			<option value="Oceania">Oceania</option>
+		</select>
+		<canvas id="chart2" height="100%"></canvas>
+		<div class="mk-legend-container">
+			<button id="chart-2-legend-europe" class="mk-legend-button">
+				Europe
+			</button>
+			<button id="chart-2-legend-africa" class="mk-legend-button">
+				Africa
+			</button>
+			<button id="chart-2-legend-asia" class="mk-legend-button">
+				Asia
+				<button id="chart-2-legend-americas" class="mk-legend-button">
+					Americas
+				</button>
+				<button id="chart-2-legend-oceania" class="mk-legend-button">
+					Oceania
+				</button>
 		</div>
 	</div>
+	<button class="collapsible">Chart 3</button>
+	<div id="chart3div" class="content">
+		<canvas id="chart3" height="100%"></canvas>
+	</div>
+	<button class="collapsible">Chart 4</button>
+	<div id="chart4div" class="content">
+		<canvas id="chart4" height="100%"></canvas>
+	</div>
+</div>
 
-	<script> // test graph 
-		// const labels = [
-		// 	'January',
-		// 	'February',
-		// 	'March',
-		// 	'April',
-		// 	'May',
-		// 	'June',
-		// ];
-		// const data = {
-		// 	labels: labels,
-		// 	datasets: [{
-		// 	label: 'My First dataset',
-		// 	backgroundColor: 'rgb(255, 99, 132)',
-		// 	borderColor: 'rgb(255, 99, 132)',
-		// 	data: [0, 10, 5, 2, 20, 30, 45],
-		// 	}]
-		// };
+<script> // test graph
+// const labels = [
+// 	'January',
+// 	'February',
+// 	'March',
+// 	'April',
+// 	'May',
+// 	'June',
+// ];
+// const data = {
+// 	labels: labels,
+// 	datasets: [{
+// 	label: 'My First dataset',
+// 	backgroundColor: 'rgb(255, 99, 132)',
+// 	borderColor: 'rgb(255, 99, 132)',
+// 	data: [0, 10, 5, 2, 20, 30, 45],
+// 	}]
+// };
 
-		// const config = {
-		// 	type: 'line',
-		// 	data: data,
-		// 	options: {}
-		// };
+// const config = {
+// 	type: 'line',
+// 	data: data,
+// 	options: {}
+// };
 
-		
-		// const myChart = new Chart(
-		// 	document.getElementById('myChart').getContext('2d'),
-		// 	config
-		// );
-	</script>
-	<script src="./barchart_adrian.js"></script>
-	<script> // folding 
-		var coll = document.getElementsByClassName("collapsible");
-		var i;
-		
-		for (i = 0; i < coll.length; i++) {
-		  coll[i].addEventListener("click", function() {
-			this.classList.toggle("active");
-			var content = this.nextElementSibling;
-			if (content.style.maxHeight){
-			  content.style.maxHeight = null;
-			} else {
-			  content.style.maxHeight = content.scrollHeight + "px";
-			} 
-		  });
+
+// const myChart = new Chart(
+// 	document.getElementById('myChart').getContext('2d'),
+// 	config
+// );
+</script>
+<script src="./barchart_adrian.js"></script>
+<script src="./areachart_maciej.js"></script>
+<script> // folding
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+	coll[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var content = this.nextElementSibling;
+		if (content.style.maxHeight){
+			content.style.maxHeight = null;
+		} else {
+			content.style.maxHeight = content.scrollHeight + "px";
 		}
-	</script>
+	});
+}
+</script>
 </body>
 </html>
