@@ -83,6 +83,18 @@
 			margin: 3rem 1rem 3rem 1rem;
 		}
 
+		.bo-legend-container {
+			align-items: center;
+			justify-content: space-around;
+		}
+
+		.bo-legend-button {
+			padding: 0;
+			border-radius: 2rem;
+			border: 2px solid darkslategray;
+			margin: 1rem 1rem 1rem 1rem;
+		}
+
 	</style>
 	<title>Global Gender Gap index</title>
 </head>
@@ -159,6 +171,24 @@
 	<button class="collapsible">Chart 3</button>
 	<div id="chart3div" class="content">
 		<canvas id="chart3" height="100%"></canvas>
+		<div class="bo-legend-container">
+			<button id="bo_legend_Global_Average" class="bo-legend-button"></button>
+			<button id="bo_legend_Northern_Africa" class="bo-legend-button"></button>
+			<button id="bo_legend_Sub-Saharan_Africa" class="bo-legend-button"></button>
+			<button id="bo_legend_Latin_America_and_the_Caribbean" class="bo-legend-button"></button>
+			<button id="bo_legend_Northern_America" class="bo-legend-button"></button>
+			<button id="bo_legend_Central_Asia" class="bo-legend-button"></button>
+			<button id="bo_legend_Eastern_Asia" class="bo-legend-button"></button>
+			<button id="bo_legend_South-eastern_Asia" class="bo-legend-button"></button>
+			<button id="bo_legend_Southern_Asia" class="bo-legend-button"></button>
+			<button id="bo_legend_Western_Asia" class="bo-legend-button"></button>
+			<button id="bo_legend_Eastern_Europe" class="bo-legend-button"></button>
+			<button id="bo_legend_Northern_Europe" class="bo-legend-button"></button>
+			<button id="bo_legend_Southern_Europe" class="bo-legend-button"></button>
+			<button id="bo_legend_Western_Europe" class="bo-legend-button"></button>
+			<button id="bo_legend_Australia_and_New_Zealand" class="bo-legend-button"></button>
+			<button id="bo_legend_Melanesia" class="bo-legend-button"></button>
+		</div>
 	</div>
 	<button class="collapsible">Chart 4</button>
 	<div id="chart4div" class="content">
@@ -199,6 +229,7 @@
 </script>
 <script src="./barchart_adrian.js"></script>
 <script src="./areachart_maciej.js"></script>
+<script src="./linechart_bartosz.js"></script>
 <script> // folding
 var coll = document.getElementsByClassName("collapsible");
 var i;
