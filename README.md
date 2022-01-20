@@ -8,8 +8,12 @@ Data used by the World Economic Forum to publish their [Gender Gap Index Report]
 * **data/** the data in [tsv](https://bl.ocks.org/mbostock/3305937).
 	* **gggi.tsv** trips details
 	* **iso3.tsv** country codes
-* **viz/** sample visualisations
-* **vendor/** vendorized d3 v7.1.1 library
+* **viz/** directory with code
+	* **main.htmls** main design layout 
+	* **areachart_maciej.js** contains code for "Which continent has achieved the greatest increase in indicator national gender gap benchmark in last 15 years?" chart
+	* **barchart_adrian.js** contains code for "How are the indexes distributed across indicators?" chart
+	* **barchart_rafal.js** contains code for "What is the sub-region with the lowest average gender gap index?" chart
+	* **linechart_bartosz.js** contains code for "How average Global Gender Index has been changing in time in different subregions compared to global average?" chart 
 
 ## Data structure
 
