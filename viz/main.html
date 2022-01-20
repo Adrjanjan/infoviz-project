@@ -192,7 +192,22 @@
 	</div>
 	<button class="collapsible">Chart 4</button>
 	<div id="chart4div" class="content">
+		<b>Indicator:</b>
+		<select name="Indicator type" id="indicator_rm" onchange="update_chart4()">
+			<option value="glob">Global index</option>
+			<option value="eco">Economic Participation</option>
+			<option value="edu">Educational Attainment</option>
+			<option value="health">Health and Survival</option>
+			<option value="pol">Political Empowerment</option>
+		</select>
+		<b>Year:</b>
+		<input type="range" class="slider" value="2012" min="2006" max="2020" id="year_rm" onchange="update_chart4()" oninput="this.nextElementSibling.value = this.value">
+		<output>2012</output>
+		</br>
 		<canvas id="chart4" height="100%"></canvas>
+		</br>
+		<div id="chart4-legend">
+		</div>
 	</div>
 </div>
 
@@ -230,6 +245,7 @@
 <script src="./barchart_adrian.js"></script>
 <script src="./areachart_maciej.js"></script>
 <script src="./linechart_bartosz.js"></script>
+<script src="./barchart_rafal.js"></script>
 <script> // folding
 var coll = document.getElementsByClassName("collapsible");
 var i;
