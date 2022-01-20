@@ -60,6 +60,19 @@ Promise.all([
             },
             scales: {
                 x: {
+                    title: {
+                      display: true,
+                      text: "Year"
+                    },
+                    ticks: {
+                        display: true
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Index value"
+                    },
                     ticks: {
                         display: true
                     }
