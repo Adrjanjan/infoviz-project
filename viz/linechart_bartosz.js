@@ -140,9 +140,6 @@ function prepare_data3(d) {
         bo_years.forEach(year => {
             let bo_agg_arr = bo_aggregated_data[subregion][year]
             bo_average_data[subregion][year] = bo_agg_arr.reduce((a,b) => a + b, 0) / bo_agg_arr.length
-            if (isNaN(bo_average_data[subregion][year])){
-                bo_average_data[subregion][year] = 0
-            }
         })
     })
 
