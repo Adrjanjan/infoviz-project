@@ -42,17 +42,27 @@ Promise.all([
         type: 'bar',
         data: rm_filter_data(final_data),
         options: {            
-            // onClick: on_click_sort_chart,
+            onClick: rm_handle_event,
             plugins: {
                 legend: {
                     display: false
                 }
             }, 
             scales: {
-                x: { 
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Subregion name'
+                  },
                   ticks: {
                     display: true
                   }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Index value'
+                    }
                 }
             },
             animation: {
@@ -69,6 +79,10 @@ Promise.all([
     rm_global_base_data = final_data 
     rm_global_bar_chart = rm_bar_chart
 });
+
+function rm_handle_event(evt){
+    console.log("WOLOLOLOLO")
+}
 
 function rm_modify_data(iData){
     let i = 0
