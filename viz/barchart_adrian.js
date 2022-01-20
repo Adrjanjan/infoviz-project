@@ -139,9 +139,19 @@ Promise.all([
                 }
             }, 
             scales: {
-                x: { 
+                x: {
+                  title: {
+                      display: true,
+                      text: 'Country'
+                  },
                   ticks: {
                     display: true
+                  }
+                }, 
+                y: {
+                  title: {
+                    display: true,
+                    text: 'Index value'
                   }
                 }
             },
