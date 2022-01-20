@@ -211,7 +211,7 @@ const updateChart2 = () => {
     oceaniaButton.style = `background-color: ${colorMap.Oceania}; color: white; width: 150px; height: 50px`;
     oceaniaButton.addEventListener("click", () => {
         mk_global_bar_chart.config.data = mk_filter_data(mk_global_base_data, {
-            region: "Europe"
+            region: "Oceania"
         });
         mk_global_bar_chart.update();
         document.getElementById('region-chart-2').value = "Oceania";
