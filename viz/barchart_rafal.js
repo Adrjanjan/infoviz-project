@@ -2,6 +2,11 @@ console.log('chart4 script added')
 
 let rm_global_base_data
 let rm_global_bar_chart
+
+let chart4_legend = {
+    region: regions,
+}
+
 Promise.all([
     d3.tsv("../data/gggi.tsv", d => ({
         iso3:      d['#alpha3'],
@@ -208,3 +213,32 @@ const update_chart4 = _ => {
 }
 const rm_get_year = _ => document.getElementById('year_rm').value
 const rm_get_indicator = _ => document.getElementById('indicator_rm').value
+
+build_chart4_legend()
+
+function build_chart4_legend(){
+    const legend_div = document.getElementById("chart4-legend")
+    legend_div.className = "rm_legend"
+    for (const region in regions){  
+         const region_column = document.createElement('div');
+         region_column.id = 'chart4_legend_region_' + region;
+         region_column.className = "legend-list"
+         const row = document.createElement('span')
+         const region_title = document.createElement('span')
+         region_title.innerText = region 
+         region_title.className = "rm-legend-region"
+         region_column.appendChild(region_title)
+         regions[region].forEach(s => {
+             row.className = "legend-row"
+
+             const square = document.createElement('div') 
+             square.className = "rm-square"
+             square.style.backgroundColor = get_color({region:region, subregion:s})
+
+             region_column.appendChild(square)
+         })
+         legend_div.appendChild(region_column)
+         legend_div.appendChild(row)
+
+    }
+}
